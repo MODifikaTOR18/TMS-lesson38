@@ -1,0 +1,48 @@
+build-hello-docker:
+  stage: build
+  image: maven:3.8.6-openjdk-11
+  script:
+    - cd simple-java-project/apps/hello-docker
+    - mvn -B -Dmaven.repo.local=./.m2/repository -DskipTests clean package
+  only:
+    - merge_requests
+    - main
+  artifacts:
+    paths:
+      - .m2/
+      - simple-java-project/apps/hello-docker/target/my-app-1.0-SNAPSHOT.jar
+
+test-hello-docker:
+  stage: test
+  image: maven:3.8.6-openjdk-11
+  script:
+    - cd simple-java-project/apps/hello-docker
+    - mvn test
+  only:
+    - merge_requests
+    - main
+  needs: ["build-hello-docker"]
+
+# spotbugs-sast:
+#   dependencies:
+#     - build-hello-docker
+#   variables:
+#     MAVEN_REPO_PATH: $CI_PROJECT_DIR/.m2/repository
+#     COMPILE: "false"
+#   rules:
+#     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+#   artifacts:
+#     reports:
+#       sast: gl-sast-report.json
+
+deploy-hello-docker:
+  stage: deploy
+  image: maven:3.8.6-openjdk-11
+  dependencies:
+    - build-hello-docker
+  only:
+    - merge_requests
+    - main
+  script:
+    - cd simple-java-project/apps/hello-docker/target
+    - java -jar my-app-1.0-SNAPSHOT.jar

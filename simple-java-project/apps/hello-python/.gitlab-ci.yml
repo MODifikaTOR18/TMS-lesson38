@@ -1,0 +1,48 @@
+build-hello-python:
+  stage: build
+  image: maven:3.8.6-openjdk-11
+  script:
+    - cd simple-java-project/apps/hello-python
+    - mvn -B -Dmaven.repo.local=./.m2/repository -DskipTests clean package
+  only:
+    - merge_requests
+    - main
+  artifacts:
+    paths:
+      - .m2/
+      - simple-java-project/apps/hello-python/target/my-app-1.0-SNAPSHOT.jar
+
+test-hello-python:
+  stage: test
+  image: maven:3.8.6-openjdk-11
+  script:
+    - cd simple-java-project/apps/hello-python
+    - mvn test
+  only:
+    - merge_requests
+    - main
+  needs: ["build-hello-python"]
+
+# spotbugs-sast:
+#   dependencies:
+#     - build-hello-python
+#   variables:
+#     MAVEN_REPO_PATH: $CI_PROJECT_DIR/.m2/repository
+#     COMPILE: "false"
+#   rules:
+#     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+#   artifacts:
+#     reports:
+#       sast: gl-sast-report.json
+
+deploy-hello-python:
+  stage: deploy
+  image: maven:3.8.6-openjdk-11
+  dependencies:
+    - build-hello-python
+  only:
+    - merge_requests
+    - main
+  script:
+    - cd simple-java-project/apps/hello-python/target
+    - java -jar my-app-1.0-SNAPSHOT.jar
