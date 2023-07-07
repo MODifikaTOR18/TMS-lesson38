@@ -76,7 +76,7 @@ pipeline {
         }
 
         stage ('Parallel create image') {
-            when { expression { BRANCH_NAME == 'master' || BRANCH_NAME ==~ "PR-"+/\d+/ } }
+            when { expression { BRANCH_NAME == 'master' || BRANCH_NAME ==~ "pr-"+/\d+/ } }
             steps {
                 script {
                     Integer PARALLEL_EXECUTE_COUNT = 3
@@ -84,6 +84,7 @@ pipeline {
                     createImageStages.each { stage ->
                         parallel stage
                     }
+
                 }
             }
         }
