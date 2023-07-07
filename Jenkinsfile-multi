@@ -20,7 +20,7 @@ pipeline {
         stage('Prepare') {
             steps {
                 script {
-                    PR_ID = prID(env.BRANCH_NAME)
+                    PR_ID = prID.prID(env.BRANCH_NAME)
                     apps = readJSON file: SERVICES_FILE
                     info ("Branch: ${env.BRANCH_NAME}")
                     info ("Pull request ID: ${PR_ID}")
@@ -47,7 +47,7 @@ pipeline {
                         }
                         info ("PR diff: ${PR_DIFF}")
                         apps.each { app, path ->
-                            if (isChanged(PR_DIFF, path)) {
+                            if (isChanged.isChanged(PR_DIFF, path)) {
                                 BUILD_APPS.put(app, path)
                             }
                         }
@@ -57,7 +57,7 @@ pipeline {
                     
                     info("Build apps: ${BUILD_APPS}")
                     Integer PARALLEL_EXECUTE_COUNT = 3
-                    buildStages = stagePrepare('build', BUILD_APPS, PARALLEL_EXECUTE_COUNT)
+                    buildStages = stagePrepare.stagePrepare('build', BUILD_APPS, PARALLEL_EXECUTE_COUNT)
                     builtApps = [:]
                 }
             }
@@ -78,7 +78,7 @@ pipeline {
             steps {
                 script {
                     Integer PARALLEL_EXECUTE_COUNT = 3
-                    createImageStages = stagePrepare('image', builtApps, PARALLEL_EXECUTE_COUNT)
+                    createImageStages = stagePrepare.stagePrepare('image', builtApps, PARALLEL_EXECUTE_COUNT)
                     createImageStages.each { stage ->
                         parallel stage
                     }
