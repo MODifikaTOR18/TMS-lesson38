@@ -6,6 +6,7 @@ def prID(branch) {
         try {
             commit_name = sh(script: 'git show -s --format=%s', returnStdout: true).trim()
             pr_id = commit_name.substring(commit_name.indexOf('#')+1, commit_name.indexOf(' from'))
+            println ("Changes in current branch ${branch}: ${pr_id}")
         } catch(err) {
             println ("Failed: ${err.getMessage()}")
             pr_id = ''
