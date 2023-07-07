@@ -95,8 +95,10 @@ pipeline {
                     withCredentials([usernamePassword(credentialsId: 'GitHub_ID', passwordVariable: 'pass', usernameVariable: 'user')]) {
                         sh "echo ${pass} | docker login ${DOCKER_REGISTRY} -u ${user} --password-stdin"
                     }
+                    log.info("Successfully logged in.")
                     builtApps.each { app, path ->
                         sh "docker push ${DOCKER_REGISTRY}/${app}:${TAG}"
+                        log.info("Successfully pushed docker image ${app} to Docker registry.")
                     }
                 }
             }
