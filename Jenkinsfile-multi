@@ -80,7 +80,7 @@ pipeline {
             steps {
                 script {
                     Integer PARALLEL_EXECUTE_COUNT = 3
-                    createImageStages = stagePrepare.stagePrepare('image', builtApps, PARALLEL_EXECUTE_COUNT)
+                    createImageStages = stagePrepare.call('image', builtApps, PARALLEL_EXECUTE_COUNT)
                     createImageStages.each { stage ->
                         parallel stage
                     }
@@ -90,7 +90,7 @@ pipeline {
         }
 
         stage ('Push image') {
-            when { expression { BRANCH_NAME == 'master' || BRANCH_NAME ==~ "PR-"+/\d+/ } }
+            when { expression { BRANCH_NAME == 'master'}} //|| BRANCH_NAME ==~ "PR-"+/\d+/ } }
             steps {
                 script {
                     withCredentials([usernamePassword(credentialsId: 'GitHub_ID', passwordVariable: 'pass', usernameVariable: 'user')]) {
