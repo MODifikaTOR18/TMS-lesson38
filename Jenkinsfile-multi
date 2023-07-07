@@ -13,7 +13,7 @@ pipeline {
     environment {
         SERVICES_FILE = 'simple-java-project/apps/services.json'
         GIT_REPO_OWNER = 'MODifikaTOR18'
-        GIT_REPO_NAME = 'TMS-lesson37'
+        GIT_REPO_NAME = 'TMS-lesson38'
         DOCKER_REGISTRY = "ghcr.io/${GIT_REPO_OWNER.toLowerCase()}"
     }
 
@@ -38,7 +38,7 @@ pipeline {
                     if (PR_ID.isEmpty()) {
                         def response = httpRequest url: "https://api.github.com/repos/${GIT_REPO_OWNER}/${GIT_REPO_NAME}/pulls/${PR_ID}/files",
                                                     customHeaders: [[name: 'Accept', value: 'application/vnd.github+json'],[name: 'X-GitHub-Api-Version', value: '2022-11-28']],
-                                                    authentication: 'github-http'
+                                                    authentication: 'bearer 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'
 
 
                         log.info("Request status Github API: "+response.status)
