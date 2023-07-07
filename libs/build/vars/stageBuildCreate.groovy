@@ -1,4 +1,4 @@
-def stageBuildCreate(app, path, lock_id) {
+def call(app, path, lock_id, builtApps) {
     return {
         stage(app) {
             lock("Build-lock-${lock_id}") {
