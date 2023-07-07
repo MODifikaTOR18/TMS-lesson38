@@ -1,4 +1,4 @@
-@Library('build') _
+@Library(['build', 'general']) _
 
 pipeline {
     agent any
@@ -22,30 +22,30 @@ pipeline {
                 script {
                     PR_ID = prID(env.BRANCH_NAME)
                     apps = readJSON file: SERVICES_FILE
-                    println ("Branch: ${env.BRANCH_NAME}")
-                    println ("Pull request ID: ${PR_ID}")
+                    info ("Branch: ${env.BRANCH_NAME}")
+                    info ("Pull request ID: ${PR_ID}")
 
                     TAG_STACK = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1").trim()
                     
                     TAG = (TAG_STACK.isEmpty()) ? 'latest' : TAG_STACK
-                    println ("Current tag for build is: ${TAG}")
+                    info ("Current tag for build is: ${TAG}")
                     PR_DIFF=[]
                     BUILD_APPS=[:]
                     
                     PR_DIFF=sh(script: 'git show --pretty=format: --name-only', returnStdout: true).trim()
-                    println ("Pull request diffs:\n${PR_DIFF}")
+                    info ("Pull request diffs:\n${PR_DIFF}")
                     if (PR_ID.isEmpty()) {
                         def response = httpRequest url: "https://api.github.com/repos/${GIT_REPO_OWNER}/${GIT_REPO_NAME}/pulls/${PR_ID}/files",
                                                     customHeaders: [[name: 'Accept', value: 'application/vnd.github+json'],[name: 'X-GitHub-Api-Version', value: '2022-11-28']],
                                                     authentication: 'github-http'
 
 
-                        println("Request status Github API: "+response.status)
+                        info("Request status Github API: "+response.status)
                         PR_DIFF_DATA = readJSON text: response.content
                         PR_DIFF_DATA.each { item ->
                             PR_DIFF.add(item.filename)
                         }
-                        println ("PR diff: ${PR_DIFF}")
+                        info ("PR diff: ${PR_DIFF}")
                         apps.each { app, path ->
                             if (isChanged(PR_DIFF, path)) {
                                 BUILD_APPS.put(app, path)
@@ -55,7 +55,7 @@ pipeline {
                         BUILD_APPS = apps
                     }
                     
-                    println("Build apps: ${BUILD_APPS}")
+                    info("Build apps: ${BUILD_APPS}")
                     Integer PARALLEL_EXECUTE_COUNT = 3
                     buildStages = stagePrepare('build', BUILD_APPS, PARALLEL_EXECUTE_COUNT)
                     builtApps = [:]
