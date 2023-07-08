@@ -19,6 +19,7 @@ pipeline {
 
     stages {
         stage('Prepare') {
+            log.info("Starting preparation steps...")
             steps {
                 script {
                     PR_ID = prID.prID(env.BRANCH_NAME)
@@ -59,13 +60,15 @@ pipeline {
                     
                     log.info("Build apps: ${BUILD_APPS}")
                     Integer PARALLEL_EXECUTE_COUNT = 3
-                    buildStages = stagePrepare.stagePrepare('build', BUILD_APPS, PARALLEL_EXECUTE_COUNT)
                     builtApps = [:]
+                    buildStages = stagePrepare.stagePrepare('build', BUILD_APPS, PARALLEL_EXECUTE_COUNT)
                 }
             }
+            log.info("Prepared!")
         }
 
         stage ('Parallel build') {
+            log.info("Statring parallel image build...")
             steps {
                 script {
                     buildStages.each { stage ->
@@ -73,12 +76,15 @@ pipeline {
                     }
                 }
             }
+            log.info("Parallel image build succeeded!")
         }
 
         stage ('Parallel create image') {
+            log.info("Starting parallel image create...")
             when { expression { BRANCH_NAME == 'master'}} //|| BRANCH_NAME ==~ "pr-"+/\d+/ } }
             steps {
                 script {
+                    log.info("Apps were built: ${builtApps}")
                     Integer PARALLEL_EXECUTE_COUNT = 3
                     createImageStages = stagePrepare.call('image', builtApps, PARALLEL_EXECUTE_COUNT)
                     createImageStages.each { stage ->
@@ -87,9 +93,11 @@ pipeline {
 
                 }
             }
+            log.info("Images were created.")
         }
 
         stage ('Push image') {
+            log.info("Beginning to push images to GitHub...")
             when { expression { BRANCH_NAME == 'master'}} //|| BRANCH_NAME ==~ "PR-"+/\d+/ } }
             steps {
                 script {
@@ -104,6 +112,7 @@ pipeline {
                     }
                 }
             }
+            log.info("Images were pushed to GitHub!")
         }
 
     }
