@@ -1,4 +1,4 @@
-@Library(['build', 'general']) _
+@Library(['build', 'general', 'deploy']) _
 
 pipeline {
     agent any
@@ -100,6 +100,7 @@ pipeline {
             steps {
                 script {
                     log.info("Beginning to push images to GitHub...")
+                    log.info("Tag added to images: ${env.TAG}")
                     withCredentials([usernamePassword(credentialsId: 'GitHub_ID', passwordVariable: 'pass', usernameVariable: 'user')]) {
                         sh "echo ${pass} | docker login ${DOCKER_REGISTRY} -u ${user} --password-stdin"
                         log.info("Successfully logged in.")
@@ -107,13 +108,27 @@ pipeline {
                     builtApps.each { app, path ->
                         sh "docker push ${DOCKER_REGISTRY}/${app}:${TAG}"
                         log.info("Successfully pushed docker image ${app} to Docker registry.")
-                        println("Successfully pushed docker image ${app} to Docker registry.")
                     }
                     log.info("Images were pushed to GitHub!")
                 }
             }
         }
 
+        stage ('Deploy') {
+            steps {
+                script {
+                    log.info("Running images...")
+                    try {
+                        runStages = stageRun(builtApps)
+                        log.info("Images started!")
+                    }
+                    catch (Exception e) {
+                        log.error("Error running images!")
+                    }
+                }
+                
+            }
+        }
     }
     post {
         always {
