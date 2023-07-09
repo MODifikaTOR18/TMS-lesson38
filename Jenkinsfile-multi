@@ -61,7 +61,7 @@ pipeline {
                     log.info("Build apps: ${BUILD_APPS}")
                     Integer PARALLEL_EXECUTE_COUNT = 3
                     builtApps = [:]
-                    buildStages = stagePrepare.stagePrepare('build', BUILD_APPS, PARALLEL_EXECUTE_COUNT)
+                    buildStages, builtApps = stagePrepare.stagePrepare('build', BUILD_APPS, PARALLEL_EXECUTE_COUNT)
                     log.info("Prepared!")
                 }
             }
