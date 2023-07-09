@@ -1,5 +1,4 @@
 def call(app, path, lock_id, builtApps) {
-    println(app, path, lock_id, builtApps)
     return {
         stage(app) {
             lock("Build-lock-${lock_id}") {
