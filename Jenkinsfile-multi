@@ -117,9 +117,12 @@ pipeline {
         stage ('Deploy') {
             steps {
                 script {
-                    log.info("Running images...")
+                    log.info("Running images from list ${builtApps}")
                     try {
                         runStages = stageRun(builtApps)
+                        runStages.each { stage ->
+                            parallel stage
+                        }
                         log.info("Images started!")
                     }
                     catch (Exception e) {
