@@ -19,9 +19,9 @@ pipeline {
 
     stages {
         stage('Prepare') {
-            log.info("Starting preparation steps...")
             steps {
                 script {
+                    log.info("Starting preparation steps...")
                     PR_ID = prID.prID(env.BRANCH_NAME)
                     apps = readJSON file: SERVICES_FILE
                     log.info ("Branch: ${env.BRANCH_NAME}")
@@ -62,45 +62,44 @@ pipeline {
                     Integer PARALLEL_EXECUTE_COUNT = 3
                     builtApps = [:]
                     buildStages = stagePrepare.stagePrepare('build', BUILD_APPS, PARALLEL_EXECUTE_COUNT)
+                    log.info("Prepared!")
                 }
             }
-            log.info("Prepared!")
         }
 
         stage ('Parallel build') {
-            log.info("Statring parallel image build...")
             steps {
                 script {
+                    log.info("Statring parallel image build...")
                     buildStages.each { stage ->
                         parallel stage
                     }
+                    log.info("Parallel image build succeeded!")
                 }
             }
-            log.info("Parallel image build succeeded!")
         }
 
         stage ('Parallel create image') {
-            log.info("Starting parallel image create...")
             when { expression { BRANCH_NAME == 'master'}} //|| BRANCH_NAME ==~ "pr-"+/\d+/ } }
             steps {
                 script {
+                    log.info("Starting parallel image create...")
                     log.info("Apps were built: ${builtApps}")
                     Integer PARALLEL_EXECUTE_COUNT = 3
                     createImageStages = stagePrepare.call('image', builtApps, PARALLEL_EXECUTE_COUNT)
                     createImageStages.each { stage ->
                         parallel stage
                     }
-
+                    log.info("Images were created.")
                 }
             }
-            log.info("Images were created.")
         }
 
         stage ('Push image') {
-            log.info("Beginning to push images to GitHub...")
             when { expression { BRANCH_NAME == 'master'}} //|| BRANCH_NAME ==~ "PR-"+/\d+/ } }
             steps {
                 script {
+                    log.info("Beginning to push images to GitHub...")
                     withCredentials([usernamePassword(credentialsId: 'GitHub_ID', passwordVariable: 'pass', usernameVariable: 'user')]) {
                         sh "echo ${pass} | docker login ${DOCKER_REGISTRY} -u ${user} --password-stdin"
                         log.info("Successfully logged in.")
@@ -110,9 +109,9 @@ pipeline {
                         log.info("Successfully pushed docker image ${app} to Docker registry.")
                         println("Successfully pushed docker image ${app} to Docker registry.")
                     }
+                    log.info("Images were pushed to GitHub!")
                 }
             }
-            log.info("Images were pushed to GitHub!")
         }
 
     }
