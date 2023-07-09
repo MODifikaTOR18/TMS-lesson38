@@ -70,7 +70,7 @@ pipeline {
         stage ('Parallel build') {
             steps {
                 script {
-                    log.info("Statring parallel image build...")
+                    log.info("Starting parallel image build...")
                     buildStages.each { stage ->
                         parallel stage
                     }
