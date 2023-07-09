@@ -121,14 +121,14 @@ pipeline {
                 script {
                     log.info("Running images from list ${pushedApps} with tag ${env.TAG}")
                     try {
-                        runStages = stageRun(pushedApps)
+                        runStages = stageDeploy(pushedApps)
                         runStages.each { stage ->
                             parallel stage
                         }
                         log.info("Images started!")
                     }
                     catch (Exception e) {
-                        log.error("Error running images! ${e}")
+                        Error("Error running images! ${e}")
                     }
                 }
                 
