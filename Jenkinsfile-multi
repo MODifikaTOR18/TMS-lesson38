@@ -29,8 +29,8 @@ pipeline {
 
                     TAG_STACK = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1").trim()
                     
-                    TAG = (TAG_STACK.isEmpty()) ? 'latest' : TAG_STACK
-                    log.info ("Current tag for build is: ${TAG}")
+                    env.TAG = (TAG_STACK.isEmpty()) ? 'latest' : TAG_STACK
+                    log.info ("Current tag for build is: ${env.TAG}")
                     PR_DIFF=[]
                     BUILD_APPS=[:]
                     
