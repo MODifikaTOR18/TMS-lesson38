@@ -123,7 +123,7 @@ pipeline {
                         log.info("Images started!")
                     }
                     catch (Exception e) {
-                        log.error("Error running images!")
+                        log.error("Error running images! ${e}")
                     }
                 }
                 
