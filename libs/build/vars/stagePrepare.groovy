@@ -13,5 +13,4 @@ def call(flag, apps, parallel_count, builtApps = [:]) {
             return stageList
         }
     }
-    
 }
