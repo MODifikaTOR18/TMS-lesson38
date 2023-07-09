@@ -116,14 +116,17 @@ pipeline {
 
         stage ('Deploy') {
             steps {
-                log.info("Running images...")
-                try {
-                    runStages = stageRun(builtApps)
-                    log.info("Images started!")
+                script {
+                    log.info("Running images...")
+                    try {
+                        runStages = stageRun(builtApps)
+                        log.info("Images started!")
+                    }
+                    catch (Exception e) {
+                        log.error("Error running images!")
+                    }
                 }
-                catch (Exception e) {
-                    log.error("Error running images!")
-                }
+                
             }
         }
     }
