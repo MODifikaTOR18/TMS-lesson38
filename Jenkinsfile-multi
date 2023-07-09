@@ -101,12 +101,14 @@ pipeline {
                 script {
                     log.info("Beginning to push images to GitHub...")
                     log.info("Tag added to images: ${env.TAG}")
+                    pushedApps = []
                     withCredentials([usernamePassword(credentialsId: 'GitHub_ID', passwordVariable: 'pass', usernameVariable: 'user')]) {
                         sh "echo ${pass} | docker login ${DOCKER_REGISTRY} -u ${user} --password-stdin"
                         log.info("Successfully logged in.")
                     }
                     builtApps.each { app, path ->
                         sh "docker push ${DOCKER_REGISTRY}/${app}:${TAG}"
+                        pushedApps.add(app)
                         log.info("Successfully pushed docker image ${app} to Docker registry.")
                     }
                     log.info("Images were pushed to GitHub!")
@@ -117,9 +119,9 @@ pipeline {
         stage ('Deploy') {
             steps {
                 script {
-                    log.info("Running images from list ${builtApps}")
+                    log.info("Running images from list ${pushedApps} with tag ${env.TAG}")
                     try {
-                        runStages = stageRun(builtApps)
+                        runStages = stageRun(pushedApps)
                         runStages.each { stage ->
                             parallel stage
                         }
