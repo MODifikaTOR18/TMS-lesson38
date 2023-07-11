@@ -115,25 +115,6 @@ pipeline {
                 }
             }
         }
-
-        stage ('Deploy') {
-            steps {
-                script {
-                    log.info("Running images from list ${pushedApps} with tag ${env.TAG}")
-                    try {
-                        runStages = stageDeploy(pushedApps)
-                        runStages.each { stage ->
-                            parallel stage
-                        }
-                        log.info("Images started!")
-                    }
-                    catch (Exception e) {
-                        Error("Error running images! ${e}")
-                    }
-                }
-                
-            }
-        }
     }
     post {
         always {
