@@ -35,7 +35,7 @@ multibranchPipelineJob('builds/ci') {
     }
   	factory {
     	workflowBranchProjectFactory {
-          	scriptPath('Jenkins_CI')
+          	scriptPath('Jenkinsfile-CI')
         }
     }
 //    triggers {
