@@ -1,10 +1,10 @@
 
-folder('build') {
+folder('builds') {
     description('<div style="border-radius:10px; text-align: center; font-size:120%; padding:15px; background-color: powderblue;">Simple app CD</div>')
 }
 
 
-multibranchPipelineJob('build/cd') {
+multibranchPipelineJob('builds/cd') {
     branchSources {
         branchSource {
             source {
@@ -26,7 +26,7 @@ multibranchPipelineJob('build/cd') {
                             strategyId(1)
                         }
                         headWildcardFilter {
-                            includes('main')
+                            includes('master')
                             excludes('')
                         }
                     }
@@ -36,7 +36,7 @@ multibranchPipelineJob('build/cd') {
     }
   	factory {
     	workflowBranchProjectFactory {
-          	scriptPath('Jenkinsfile-CD')
+          	scriptPath('Jenkins_CD')
         }
     }
   	properties {

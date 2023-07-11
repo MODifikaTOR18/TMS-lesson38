@@ -1,9 +1,9 @@
 
-folder('build') {
-    description('<div style="border-radius:10px; text-align: center; font-size:120%; padding:15px; background-color: powderblue;">Simple app CI</div>')
+folder('builds') {
+//    description('<div style="border-radius:10px; text-align: center; font-size:120%; padding:15px; background-color: powderblue;">Simple app CI/CD</div>')
 }
 
-multibranchPipelineJob('build/ci') {
+multibranchPipelineJob('builds/ci') {
     branchSources {
         branchSource {
             source {
@@ -25,7 +25,7 @@ multibranchPipelineJob('build/ci') {
                             strategyId(1)
                         }
                         headWildcardFilter {
-                            includes('main')
+                            includes('master')
                             excludes('')
                         }
                     }
@@ -35,12 +35,14 @@ multibranchPipelineJob('build/ci') {
     }
   	factory {
     	workflowBranchProjectFactory {
-          	scriptPath('Jenkinsfile-CI')
+          	scriptPath('Jenkins_CI')
         }
     }
-    triggers {
-        upstream('build/cd')
-    }
+//    triggers {
+//        upstream {
+//            upstreamProjects('build/cd')
+//        }  
+//    }
   	properties {
         folderLibraries {
             libraries {
