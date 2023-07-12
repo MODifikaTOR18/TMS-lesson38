@@ -5,20 +5,9 @@ credentials:
       - usernamePassword:
           description: "GitHub pass"
           id: "GitHub_ID"
-          password: "{AQAAABAAAAAwKqIlA3wUbNqxkz4m27QWTr2YCKejc55Siu3el1ZBhT5FduAwhFb/m1hV57aN0fix3Um47hok1VdN/hMWA13MGA==}"
+          password: "${GITHUB_PAT}"
           scope: GLOBAL
           username: "modifikator18"
-    - credentials:
-      - string:
-          id: "botSecret"
-          scope: GLOBAL
-          secret: "{AQAAABAAAAAwdZ4JtXZL9dpdH2kH1wglxRiiKzVeR7NNKnRA5LylR1R+XgNOm1PxD0lEA2GGtp+g7EKcv60JlQufCVyAaqLvPw==}"
-      - string:
-          id: "chatId"
-          scope: GLOBAL
-          secret: "{AQAAABAAAAAQ7Vn07bdI0V9/fWj2aTE4Zydt6rRmE5rsUppiktPBhRk=}"
-      domain:
-        name: "Telegram"
 
 jenkins:
   systemMessage: "<div style='border-radius:10px; text-align: center; padding:20px; font-size:160%; background-color: tomato;'>Jenkins configured automatically by Jenkins Configuration as Code plugin</div><br>"
@@ -51,6 +40,8 @@ unclassified:
   locale:
     ignoreAcceptLanguage: true
     systemLocale: "en"
+  gitHubConfiguration:
+    apiRateLimitChecker: NoThrottle
 
 jobs:
   - file: /var/jenkins_home/casc_configs/CI.groovy
