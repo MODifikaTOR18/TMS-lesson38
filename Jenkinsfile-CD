@@ -27,28 +27,9 @@ pipeline {
                 }
             }
         }
-/*        stage ('Pull image') {
+/*
+        stage ('Pull image') {
             
-        }
-/*        stage ('Push image') {
-            when { expression { BRANCH_NAME == 'master'}} //|| BRANCH_NAME ==~ "PR-"+/\d+/ } }
-            steps {
-                script {
-                    log.info("Beginning to push images to GitHub...")
-                    log.info("Tag added to images: ${env.TAG}")
-                    pushedApps = []
-                    withCredentials([usernamePassword(credentialsId: 'GitHub_ID', passwordVariable: 'pass', usernameVariable: 'user')]) {
-                        sh "echo ${pass} | docker login ${DOCKER_REGISTRY} -u ${user} --password-stdin"
-                        log.info("Successfully logged in.")
-                    }
-                    builtApps.each { app, path ->
-                        sh "docker push ${DOCKER_REGISTRY}/${app}:${TAG}"
-                        pushedApps.add(app)
-                        log.info("Successfully pushed docker image ${app} to Docker registry.")
-                    }
-                    log.info("Images were pushed to GitHub!")
-                }
-            }
         }
 */
         stage ('Deploy') {

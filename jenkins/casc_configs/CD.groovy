@@ -30,11 +30,13 @@ multibranchPipelineJob('builds/cd') {
             }
         }
     }
+
   	factory {
     	workflowBranchProjectFactory {
           	scriptPath('Jenkinsfile-CD')
         }
     }
+    
   	properties {
         folderLibraries {
             libraries {
