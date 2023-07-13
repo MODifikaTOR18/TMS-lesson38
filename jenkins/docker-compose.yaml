@@ -23,7 +23,7 @@ services:
       - GITHUB_PAT
     volumes:
       # - jenkins-data:/var/jenkins_home
-      - /root/TMS/ls38/jenkins/casc_configs:/var/jenkins_home/casc_configs/
+      - ~/tms/ls38/jenkins/casc_configs:/var/jenkins_home/casc_configs/
     networks:
       - jenkins-network
   jenkins-docker:
@@ -60,4 +60,4 @@ networks:
 
 secrets:
   GITHUB_PAT:
-    file: /root/TMS/ls38/jenkins/github_pat
+    file: ~/tms/ls38/jenkins/github_pat

@@ -45,6 +45,6 @@ unclassified:
 
 jobs:
   - file: /var/jenkins_home/casc_configs/CI.groovy
-#  - file: /var/jenkins_home/casc_configs/CD.groovy
+  - file: /var/jenkins_home/casc_configs/CD.groovy
   - file: /var/jenkins_home/casc_configs/1.groovy
 #/var/jenkins_home/casc_configs/
