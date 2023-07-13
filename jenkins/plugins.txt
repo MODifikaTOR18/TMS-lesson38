@@ -30,3 +30,4 @@ custom-tools-plugin:latest
 telegram-notifications:latest
 pipeline-utility-steps:latest
 locale:latest
+lockable-resources:latest

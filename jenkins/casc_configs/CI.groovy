@@ -1,6 +1,6 @@
 
 folder('builds') {
-//    description('<div style="border-radius:10px; text-align: center; font-size:120%; padding:15px; background-color: powderblue;">Simple app CI/CD</div>')
+    description('<div style="border-radius:10px; text-align: center; font-size:120%; padding:15px; background-color: powderblue;">Simple app CI/CD</div>')
 }
 
 multibranchPipelineJob('builds/ci') {
@@ -8,14 +8,10 @@ multibranchPipelineJob('builds/ci') {
         branchSource {
             source {
                 github {
-                    // Specify the name of the GitHub Organization or GitHub User Account.
                     repoOwner('modifikator18')
-                    // The repository to scan.
                     repository('TMS-lesson38')
-                    // Specify the HTTPS URL of the GitHub Organization / User Account and repository.
                     repositoryUrl('https://github.com/MODifikaTOR18/TMS-lesson38.git')
                     configuredByUrl(true)
-                    // Credentials used to scan branches and pull requests, check out sources and mark commit statuses.
                     credentialsId('GitHub_ID')
                     traits {
                         gitHubBranchDiscovery {
@@ -33,17 +29,18 @@ multibranchPipelineJob('builds/ci') {
             }
         }
     }
-  	factory {
-    	workflowBranchProjectFactory {
-          	scriptPath('Jenkinsfile-CI')
+
+    factory {
+	workflowBranchProjectFactory {
+            scriptPath('Jenkinsfile-CI')
         }
     }
-//    triggers {
-//        upstream {
-//            upstreamProjects('build/cd')
-//        }  
+// Вот этот блок ломает скрипт
+//    publishers {
+// s       downstream('builds/cd', 'SUCCESS')
 //    }
-  	properties {
+
+    properties {
         folderLibraries {
             libraries {
                 libraryConfiguration {
@@ -58,9 +55,7 @@ multibranchPipelineJob('builds/ci') {
                                 libraryPath('libs/general')
                             }
                         }
-                        // If checked, scripts may select a custom version of the library by appending @someversion in the @Library annotation.
                         allowVersionOverride(true)
-                        // A default version of the library to load if a script does not select another.
                         defaultVersion('master')
                     }
                 }
@@ -76,9 +71,7 @@ multibranchPipelineJob('builds/ci') {
                                 libraryPath('libs/build')
                             }
                         }
-                        // If checked, scripts may select a custom version of the library by appending @someversion in the @Library annotation.
                         allowVersionOverride(true)
-                        // A default version of the library to load if a script does not select another.
                         defaultVersion('master')
                     }
                 }
