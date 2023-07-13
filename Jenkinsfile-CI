@@ -120,5 +120,8 @@ pipeline {
         always {
             cleanWs()
         }
+        post {
+            build job: 'builds/cd', wait: false
+        }
     }
 }

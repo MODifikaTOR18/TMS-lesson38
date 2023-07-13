@@ -35,10 +35,15 @@ multibranchPipelineJob('builds/ci') {
             scriptPath('Jenkinsfile-CI')
         }
     }
+
 // Вот этот блок ломает скрипт
-//    publishers {
-// s       downstream('builds/cd', 'SUCCESS')
-//    }
+    publishers {
+        downstream {
+            trigger('builds/cd') {
+                condition('SUCCESS')
+            }
+        }
+    }
 
     properties {
         folderLibraries {
