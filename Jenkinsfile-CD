@@ -18,6 +18,13 @@ pipeline {
     }
 
     stages {
+        stage ('Prepare') {
+            steps {
+                script {
+                    apps = readJSON file: SERVICES_FILE
+                }
+            }
+        }
 /*        stage ('Pull image') {
             
         }
@@ -45,9 +52,9 @@ pipeline {
         stage ('Deploy') {
             steps {
                 script {
-                    log.info("Running images from list ${pushedApps} with tag ${env.TAG}")
+                    log.info("Running images from list ${apps} with tag ${env.TAG}")
                     try {
-                        runStages = stageDeploy(pushedApps)
+                        runStages = stageDeploy(apps)
                         runStages.each { stage ->
                             parallel stage
                         }
