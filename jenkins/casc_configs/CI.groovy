@@ -4,10 +4,6 @@ folder('builds') {
 }
 
 multibranchPipelineJob('builds/ci') {
-    blockOn ('builds/cd') {
-        blockLevel('GLOBAL')
-        scanQueueFor('DISABLED')
-    }
 
     branchSources {
         branchSource {

@@ -36,7 +36,7 @@ multibranchPipelineJob('builds/cd') {
           	scriptPath('Jenkinsfile-CD')
         }
     }
-    
+
   	properties {
         folderLibraries {
             libraries {

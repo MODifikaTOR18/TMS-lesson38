@@ -1,4 +1,4 @@
-@Library(['build', 'general', 'deploy']) _
+@Library(['general', 'deploy']) _
 
 pipeline {
     agent any
@@ -27,11 +27,7 @@ pipeline {
                 }
             }
         }
-/*
-        stage ('Pull image') {
-            
-        }
-*/
+
         stage ('Deploy') {
             steps {
                 script {
