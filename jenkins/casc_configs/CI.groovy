@@ -4,6 +4,11 @@ folder('builds') {
 }
 
 multibranchPipelineJob('builds/ci') {
+    blockOn ('builds/cd') {
+        blockLevel('GLOBAL')
+        scanQueueFor('DISABLED')
+    }
+
     branchSources {
         branchSource {
             source {
@@ -37,14 +42,14 @@ multibranchPipelineJob('builds/ci') {
     }
 
 // Вот этот блок ломает скрипт
-    publishers {
+/*    publishers {
         downstream {
             trigger('builds/cd') {
                 condition('SUCCESS')
             }
         }
     }
-
+*/
     properties {
         folderLibraries {
             libraries {
