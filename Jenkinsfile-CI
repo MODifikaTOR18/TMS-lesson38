@@ -120,7 +120,7 @@ pipeline {
         always {
             cleanWs()
         }
-        post {
+        success {
             build job: 'builds/cd', wait: false
         }
     }

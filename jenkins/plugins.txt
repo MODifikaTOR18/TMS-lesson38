@@ -31,3 +31,4 @@ telegram-notifications:latest
 pipeline-utility-steps:latest
 locale:latest
 lockable-resources:latest
+build-blocker-plugin:latest
