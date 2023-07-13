@@ -22,6 +22,8 @@ pipeline {
             steps {
                 script {
                     apps = readJSON file: SERVICES_FILE
+                    TAG_STACK = sh(returnStdout: true, script: "git tag --sort version:refname | tail -1").trim()
+                    env.TAG = (TAG_STACK.isEmpty()) ? 'latest' : TAG_STACK
                 }
             }
         }
